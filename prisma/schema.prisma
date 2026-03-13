@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Domain {
+  id               String       @id @default(uuid())
+  fromName         String
+  fromEmail        String       @unique
+  smtpHost         String
+  smtpPort         Int
+  smtpUser         String
+  smtpPass         String       @db.Text // Encrypted
+  imapHost         String
+  imapPort         Int
+  imapUser         String
+  imapPass         String       @db.Text // Encrypted
+  dailyLimit       Int?
+  isActive         Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  warmupLogsFrom   WarmupLog[]  @relation("FromDomain")
+  warmupLogsTo     WarmupLog[]  @relation("ToDomain")
+}
+
+model WarmupLog {
+  id            String    @id @default(uuid())
+  fromDomainId  String
+  fromDomain    Domain    @relation("FromDomain", fields: [fromDomainId], references: [id])
+  toDomainId    String
+  toDomain      Domain    @relation("ToDomain", fields: [toDomainId], references: [id])
+  toEmail       String
+  subject       String
+  body          String    @db.Text
+  status        WarmupStatus
+  errorMessage  String?
+  sentAt        DateTime  @default(now())
+}
+
+enum WarmupStatus {
+  SENT
+  FAILED
+  REPLIED
+  MOVED_TO_INBOX
+}
+
+model WarmupConfig {
+  key   String @id
+  value String
+}
