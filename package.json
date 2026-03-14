@@ -5,7 +5,8 @@
   "scripts": {
     "start": "bun run src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "db": "bunx prisma migrate dev --name init && bunx prisma generate && bunx prisma db push"
+    "db": "bunx prisma migrate dev --name init && bunx prisma generate && bunx prisma db push",
+    "build": "bunx tsc"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

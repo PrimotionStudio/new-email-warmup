@@ -152,11 +152,11 @@ curl -X POST http://localhost:9999/api/domains \
   "fromEmail": "john.doe@domain-a.com",
   "smtpHost": "smtp.domain-a.com",
   "smtpPort": 465,
-  "smtpUser": "john.doe",
+  "smtpUser": "john.doe@domain-a.com",
   "smtpPass": "smtp_password_a",
   "imapHost": "imap.domain-a.com",
   "imapPort": 993,
-  "imapUser": "john.doe",
+  "imapUser": "john.doe@domain-a.com",
   "imapPass": "imap_password_a",
   "dailyLimit": 20
 }'
