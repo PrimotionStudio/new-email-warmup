@@ -151,7 +151,7 @@ curl -X POST http://localhost:9999/api/domains \
   "fromName": "John Doe",
   "fromEmail": "john.doe@domain-a.com",
   "smtpHost": "smtp.domain-a.com",
-  "smtpPort": 587,
+  "smtpPort": 465,
   "smtpUser": "john.doe",
   "smtpPass": "smtp_password_a",
   "imapHost": "imap.domain-a.com",

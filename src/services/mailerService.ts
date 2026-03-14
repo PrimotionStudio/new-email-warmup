@@ -1,5 +1,5 @@
-import nodemailer from 'nodemailer';
-import logger from '../utils/logger';
+import nodemailer from "nodemailer";
+import logger from "../utils/logger";
 
 interface SmtpConfig {
   host: string;
@@ -19,7 +19,9 @@ interface WarmupEmailOptions {
   smtpConfig: SmtpConfig;
 }
 
-export async function sendWarmupEmail(options: WarmupEmailOptions): Promise<boolean> {
+export async function sendWarmupEmail(
+  options: WarmupEmailOptions,
+): Promise<boolean> {
   const { from, to, subject, html, smtpConfig } = options;
 
   try {
@@ -42,19 +44,23 @@ export async function sendWarmupEmail(options: WarmupEmailOptions): Promise<bool
       subject,
       html,
       headers: {
-        'X-Warmup': 'true',
+        "X-Warmup": "true",
       },
     });
 
     logger.info(`Warmup email sent from ${from} to ${to}: ${info.messageId}`);
     return true;
   } catch (error) {
-    logger.error(`Failed to send warmup email from ${from} to ${to}: ${error instanceof Error ? error.message : String(error)}`);
+    logger.error(
+      `Failed to send warmup email from ${from} to ${to}: ${error instanceof Error ? error.message : String(error)}`,
+    );
     return false;
   }
 }
 
-export async function testSmtpConnection(smtpConfig: SmtpConfig): Promise<boolean> {
+export async function testSmtpConnection(
+  smtpConfig: SmtpConfig,
+): Promise<boolean> {
   try {
     const transporter = nodemailer.createTransport({
       host: smtpConfig.host,
@@ -73,7 +79,9 @@ export async function testSmtpConnection(smtpConfig: SmtpConfig): Promise<boolea
     logger.info(`SMTP connection successful for user: ${smtpConfig.auth.user}`);
     return true;
   } catch (error) {
-    logger.error(`SMTP connection failed for user ${smtpConfig.auth.user}: ${error instanceof Error ? error.message : String(error)}`);
+    logger.error(
+      `SMTP connection failed for user ${smtpConfig.auth.user}: ${error instanceof Error ? error.message : String(error)}`,
+    );
     return false;
   }
 }
