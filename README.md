@@ -64,7 +64,7 @@ Now, edit the `.env` file with your specific configuration.
 
 ```env
 # Server Configuration
-PORT=3000
+PORT=9999
 NODE_ENV=development # 'production' for production
 
 # Database URL
@@ -101,7 +101,7 @@ bun prisma db push
 bun run start
 ```
 
-The API should now be running on `http://localhost:3000`.
+The API should now be running on `http://localhost:9999`.
 
 ---
 
@@ -144,7 +144,7 @@ Here's a full example of how to use the API.
 Let's add the first domain.
 
 ```bash
-curl -X POST http://localhost:3000/api/domains \
+curl -X POST http://localhost:9999/api/domains \
 -H "Content-Type: application/json" \
 -H "X-API-Key: your-super-secret-key" \
 -d '{
@@ -169,7 +169,7 @@ curl -X POST http://localhost:3000/api/domains \
 Now, test if the SMTP and IMAP credentials are correct. Replace `:id` with the actual ID you received from the previous step.
 
 ```bash
-curl -X POST http://localhost:3000/api/domains/YOUR_DOMAIN_ID/test \
+curl -X POST http://localhost:9999/api/domains/YOUR_DOMAIN_ID/test \
 -H "X-API-Key: your-super-secret-key"
 ```
 
@@ -186,7 +186,7 @@ You should get a response like:
 Let's manually trigger a warmup cycle. This will attempt to send an email from each active domain to another random active domain.
 
 ```bash
-curl -X POST http://localhost:3000/api/warmup/trigger \
+curl -X POST http://localhost:9999/api/warmup/trigger \
 -H "X-API-Key: your-super-secret-key"
 ```
 
@@ -204,7 +204,7 @@ The response will tell you how many emails were sent, skipped, or failed.
 Finally, check the logs to see the record of the email that was just sent.
 
 ```bash
-curl -X GET "http://localhost:3000/api/logs?limit=5" \
+curl -X GET "http://localhost:9999/api/logs?limit=5" \
 -H "X-API-Key: your-super-secret-key"
 ```
 

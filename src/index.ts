@@ -1,36 +1,51 @@
-import { PrismaClient } from '@prisma/client';
-import { env } from './config/env';
-import app from './app';
-import logger from './utils/logger';
-import { startWarmupScheduler, stopWarmupScheduler } from './jobs/warmupScheduler';
-import { startImapPoller, stopImapPoller } from './jobs/imapPoller';
+import { PrismaClient } from "@prisma/client";
+import { env } from "./config/env";
+import app from "./app";
+import logger from "./utils/logger";
+import {
+  startWarmupScheduler,
+  stopWarmupScheduler,
+} from "./jobs/warmupScheduler";
+import { startImapPoller, stopImapPoller } from "./jobs/imapPoller";
 
 const prisma = new PrismaClient();
 const PORT = env.PORT;
 
 async function seedWarmupConfig() {
-  logger.info('Seeding default WarmupConfig...');
+  logger.info("Seeding default WarmupConfig...");
   await prisma.warmupConfig.upsert({
-    where: { key: 'global_daily_limit' },
+    where: { key: "global_daily_limit" },
     update: {},
-    create: { key: 'global_daily_limit', value: String(env.DEFAULT_DAILY_LIMIT) },
+    create: {
+      key: "global_daily_limit",
+      value: JSON.stringify(env.DEFAULT_DAILY_LIMIT),
+    },
   });
   await prisma.warmupConfig.upsert({
-    where: { key: 'send_window_start' },
+    where: { key: "send_window_start" },
     update: {},
-    create: { key: 'send_window_start', value: env.SEND_WINDOW_START },
+    create: {
+      key: "send_window_start",
+      value: JSON.stringify(env.SEND_WINDOW_START),
+    },
   });
   await prisma.warmupConfig.upsert({
-    where: { key: 'send_window_end' },
+    where: { key: "send_window_end" },
     update: {},
-    create: { key: 'send_window_end', value: env.SEND_WINDOW_END },
+    create: {
+      key: "send_window_end",
+      value: JSON.stringify(env.SEND_WINDOW_END),
+    },
   });
   await prisma.warmupConfig.upsert({
-    where: { key: 'reply_probability' },
+    where: { key: "reply_probability" },
     update: {},
-    create: { key: 'reply_probability', value: String(env.REPLY_PROBABILITY) },
+    create: {
+      key: "reply_probability",
+      value: JSON.stringify(env.REPLY_PROBABILITY),
+    },
   });
-  logger.info('WarmupConfig seeding complete.');
+  logger.info("WarmupConfig seeding complete.");
 }
 
 async function main() {
@@ -54,16 +69,16 @@ async function main() {
     stopImapPoller();
     await prisma.$disconnect();
     server.close(() => {
-      logger.info('HTTP server closed.');
+      logger.info("HTTP server closed.");
       process.exit(0);
     });
   };
 
-  process.on('SIGTERM', gracefulShutdown);
-  process.on('SIGINT', gracefulShutdown);
+  process.on("SIGTERM", gracefulShutdown);
+  process.on("SIGINT", gracefulShutdown);
 }
 
-main().catch(error => {
-  logger.error('Unhandled error in main application:', error);
+main().catch((error) => {
+  logger.error("Unhandled error in main application:", error);
   process.exit(1);
 });
